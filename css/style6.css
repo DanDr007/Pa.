@@ -1,0 +1,107 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 1/12/2021, 05:32:52 PM
+    Author     : PRIDE OTTER
+*/
+
+*{
+    padding: 0%;
+    margin: 0%;
+}
+
+.btn1{
+    padding: 1rem;
+    position: absolute;
+width: 380px;
+height: 93px;
+left: 117px;
+top: 233px;
+background: #2F2F2F;
+color: white;
+font-family: Jockey One;
+font-style: normal;
+font-weight: normal;
+font-size: 36px;
+line-height: 50px;
+display: flex;
+align-items: center;
+text-align: center;
+border: none;
+border-radius: 1rem;
+}
+
+.btn2{
+    padding: 1rem;
+position: absolute;
+width: 380px;
+height: 93px;
+left: 553px;
+top: 236px;
+background: #2F2F2F;
+color: white;
+font-family: Jockey One;
+font-style: normal;
+font-weight: normal;
+font-size: 36px;
+line-height: 50px;
+display: flex;
+align-items: center;
+text-align: center;
+border: none;
+border-radius: 1.5rem;
+}
+
+.btn3{
+    padding: 1rem;
+position: absolute;
+width: 420px;
+height: 93px;
+left: 953px;
+top: 236px;
+background: #2F2F2F;
+color: white;
+font-family: Jockey One;
+font-style: normal;
+font-weight: normal;
+font-size: 36px;
+line-height: 50px;
+display: flex;
+align-items: center;
+text-align: center;
+border: none;
+border-radius: 1.5rem;
+}
+
+header{
+    width: 100%;
+    height: 60px;
+    box-shadow: 1px 1px 5px #000;
+    align-items: center;
+    text-align: center;
+    background-color: #2F2F2F;
+    font-family: Fjalla One;
+font-style: normal;
+font-weight: normal;
+font-size: 40px;
+line-height: 67px;
+
+}
+
+a{
+    text-decoration: none;
+    color: white;
+}
+.ingresar{
+    position: absolute;
+width: 110px;
+height: 50px;
+right: 70px;
+top: 5px;
+color: white;
+font-size: 30px;
+display: flex;
+}
