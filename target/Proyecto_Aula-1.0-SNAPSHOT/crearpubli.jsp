@@ -57,13 +57,12 @@
                 <a href="sesion.jsp" class="ingresar">Ingresar</a>
         </section>
     </header>
-<p>
     <div class="container" >
 <h1 align="center" style="color:#ffffff"> Crear la publicacion </h1>
 <hr>
 <br>
 
-<form name="formulario" method="post" action="Publicar" onsubmit="return validar()">
+<form name="formulario" method="get" action="Publicar" onsubmit="return validar()">
     
     
 <h1 align="left" style="color:#ffffff"> Tipo de Altercado:
@@ -154,10 +153,10 @@
             <br>
         <h1 align="center" style="color:#ffffff">Describe tu opinion</h1>
 	<p align="center"><textarea name="textarea" rows="10" cols="50" id="texto" placeholder="Ingresa tu mensaje..."></textarea>
-	</div>
+	
         <p class="btn"><a align="left" href="linea<%=id%>.jsp"><img src="regresar.PNG" width="190" height="80"></a><input align="right" type="image" src="boton1.PNG" alt="submit" width="190" height="80" onclick="return validar()" /></p>
 	</form>
-                
+             </div>   
 </body>
 </html>
 <%}%>

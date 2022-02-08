@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,8 +19,10 @@ import java.util.List;
  * @author PRIDE OTTER
  */
 public class publicacion {
-    private int id, id_hor, id_ins, id_par, id_usu, id_mes, id_anio, repeticiones, id_lin;
 
+    public static int String;
+
+    private int id, id_hor, id_ins, id_par, id_usu, id_mes, id_anio, repeticiones, id_lin;
     public int getId_lin() {
         return id_lin;
     }
@@ -148,112 +151,107 @@ public class publicacion {
     public void setNum_ano(String num_ano) {
         this.num_ano = num_ano;
     }
-    
-    public publicacion(){
-    
+
+    public publicacion() {
+
     }
 
-
-public static int registrarPublicacion(publicacion e){
+    public static void registrarPublicacion(publicacion e) {
         int estatus = 0;
-        try{
-            Connection con = Conexion.getConnection();
+        System.out.println("hay alv");
+        System.out.println(e.getId_anio());
+        Connection con;
+        Statement set;
+        try {
+            con = Conexion.getConnection();
             String q = "INSERT INTO mpublicacion(Des_pub, id_hor, id_ins, id_par, id_usu, id_mes, id_anio) "
-                    + "values(?,?,?,?,?,?,?)";
+                    + "values('"+e.getContenido()+"','"+e.getId_hor()+"','"+e.getId_ins()+"','"+e.getId_par()+"','"+e.getId_usu()+"','"+e.getId_mes()+"','"+e.getId_anio()+"')";
             
-            PreparedStatement ps = con.prepareStatement(q);
-            
-            //usar getter and setter
-            ps.setString(1, e.getContenido());            
-            ps.setInt(2, e.getId_hor());
-            ps.setInt(3, e.getId_ins());
-            ps.setInt(4, e.getId_par());
-            ps.setInt(5, e.getId_usu());
-            ps.setInt(6, e.getId_mes());
-            ps.setInt(7, e.getId_anio());
-            
-            estatus = ps.executeUpdate();
+            System.out.println("noseweeee");
+            set = con.createStatement();
+            set.executeUpdate(q);
+            System.out.println("aaAaaAA");
             System.out.println("Registro Exitoso del publicacion");
+            set.close();
             con.close();
-        
-        }catch(Exception ed){
+        } catch (SQLException ed) {
             System.out.println("Error al registrar al publicacion");
             System.out.println(ed.getMessage());
-        
+
         }
-        return estatus;
+        System.out.println("Fin");
     }
 
-public static int actualizarPublicacion(publicacion e){
+    public static int actualizarPublicacion(publicacion e) {
         int estatus = 0;
-        try{
+        try {
+            System.out.println("hayno");
             Connection con = Conexion.getConnection();
             String q = "update mpublicacion set des_pub = ?, id_hor = ?, id_ins = ?,"
                     + "id_par = ?, id_mes = ?, id_anio = ? "
                     + "where id_pub = ?";
-            
+
             PreparedStatement ps = con.prepareStatement(q);
-            
+            System.out.println("Hoola");
             //usar getter and setter
-            ps.setString(1, e.getContenido());            
+            ps.setString(1, e.getContenido());
             ps.setInt(2, e.getId_hor());
             ps.setInt(3, e.getId_ins());
             ps.setInt(4, e.getId_par());
-           
+            System.out.println("Lapmt");
             ps.setInt(5, e.getId_mes());
             ps.setInt(6, e.getId_anio());
             ps.setInt(7, e.getId());
-            
+
             estatus = ps.executeUpdate();
             System.out.println("Actualizacion Exitosa del publicacion");
             con.close();
-        
-        }catch(Exception ed){
+
+        } catch (Exception ed) {
             System.out.println("Error al actualizar al publicacion");
             System.out.println(ed.getMessage());
-        
+
         }
         return estatus;
     }
 
-public static int borrarPublicacion(int id){
+    public static int borrarPublicacion(int id) {
         int estatus = 0;
-        try{
+        try {
             Connection con = Conexion.getConnection();
             String q = "delete from mpublicacion where id_pub = ?";
-            
+
             PreparedStatement ps = con.prepareStatement(q);
-            
+
             //usar getter and setter
             ps.setInt(1, id);
-            
-            
+
             estatus = ps.executeUpdate();
             System.out.println("Borrado Exitoso del publicacion");
             con.close();
-        
-        }catch(Exception ed){
+
+        } catch (Exception ed) {
             System.out.println("Error al borrar al publicacion");
             System.out.println(ed.getMessage());
-        
+
         }
         return estatus;
     }
 
-public static publicacion buscarPublicacionById(int id){
+    public static publicacion buscarPublicacionById(int id) {
         publicacion e = new publicacion();
-        try{
+        try {
             Connection con = Conexion.getConnection();
             String q = "select mpublicacion.ID_pub, mpublicacion.des_pub, ehorario.nom_hor, ctipoinseguridad.nom_ins, clinea.nom_lin, cestacion.nom_est, musuario.nom_usu, cmes.nom_mes, canio.num_ano FROM mpublicacion INNER JOIN eparadas ON eparadas.id_par = mpublicacion.id_par INNER JOIN clinea ON clinea.id_lin = eparadas.id_lin INNER JOIN cestacion ON cestacion.id_est=eparadas.id_est INNER JOIN ehorario ON ehorario.id_hor=mpublicacion.id_hor INNER JOIN ctipoinseguridad ON ctipoinseguridad.id_ins=mpublicacion.id_ins INNER JOIN musuario ON musuario.id_usu=mpublicacion.id_usu INNER JOIN cmes ON cmes.id_mes=mpublicacion.id_mes INNER JOIN canio ON canio.id_ano=mpublicacion.id_anio WHERE id_pub = ?";
-            
+
             PreparedStatement ps = con.prepareStatement(q);
-            
+
             ps.setInt(1, id);
-            
+
             ResultSet rs = ps.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 e.setId(rs.getInt(1));
-                e.setContenido(rs.getString(2));               
+                e.setContenido(rs.getString(2));
                 e.setNom_hor(rs.getString(3));
                 e.setNom_ins(rs.getString(4));
                 e.setNom_lin(rs.getString(5));
@@ -261,34 +259,33 @@ public static publicacion buscarPublicacionById(int id){
                 e.setNom_usu(rs.getString(7));
                 e.setNom_mes(rs.getString(8));
                 e.setNum_ano(rs.getString(9));
-            }   
-            
+            }
+
             System.out.println("Publicacion encontrado");
             con.close();
-        
-        }catch(Exception ed){
+
+        } catch (Exception ed) {
             System.out.println("Error al buscar al Publicacion");
             System.out.println(ed.getMessage());
-        
+
         }
         return e;
     }
 
- public static List<publicacion> buscarAllPublicaciones(){
+    public static List<publicacion> buscarAllPublicaciones() {
         List<publicacion> lista = new ArrayList<publicacion>();
-        
-        try{
+
+        try {
             Connection con = Conexion.getConnection();
             String q = "select mpublicacion.ID_pub, mpublicacion.des_pub, ehorario.nom_hor, ctipoinseguridad.nom_ins, clinea.nom_lin, cestacion.nom_est, musuario.nom_usu, cmes.nom_mes, canio.num_ano, eparadas.id_lin FROM mpublicacion INNER JOIN eparadas ON eparadas.id_par = mpublicacion.id_par INNER JOIN clinea ON clinea.id_lin = eparadas.id_lin INNER JOIN cestacion ON cestacion.id_est=eparadas.id_est INNER JOIN ehorario ON ehorario.id_hor=mpublicacion.id_hor INNER JOIN ctipoinseguridad ON ctipoinseguridad.id_ins=mpublicacion.id_ins INNER JOIN musuario ON musuario.id_usu=mpublicacion.id_usu INNER JOIN cmes ON cmes.id_mes=mpublicacion.id_mes INNER JOIN canio ON canio.id_ano=mpublicacion.id_anio ORDER BY mpublicacion.id_pub";
-            
-            PreparedStatement ps = con.prepareStatement(q);
-            
-           
-            ResultSet rs = ps.executeQuery();
-            while(rs.next()){
+
+            Statement set = con.createStatement();
+
+            ResultSet rs = set.executeQuery(q);
+            while (rs.next()) {
                 publicacion e = new publicacion();
                 e.setId(rs.getInt(1));
-                e.setContenido(rs.getString(2));               
+                e.setContenido(rs.getString(2));
                 e.setNom_hor(rs.getString(3));
                 e.setNom_ins(rs.getString(4));
                 e.setNom_lin(rs.getString(5));
@@ -299,34 +296,32 @@ public static publicacion buscarPublicacionById(int id){
                 e.setId_lin(rs.getInt(10));
                 lista.add(e);
             }
-            
+
             System.out.println("Publicacion encontrado");
             con.close();
-        
-        }catch(Exception ed){
+
+        } catch (Exception ed) {
             System.out.println("Error al buscar a los Publicacion");
             System.out.println(ed.getMessage());
-        
+
         }
         return lista;
     }
- 
-public static List<publicacion> buscarAllPublicacionesByLinea(int id){
+
+    public static List<publicacion> buscarAllPublicacionesByLinea(int id) {
         List<publicacion> lista = new ArrayList<>();
-       
-        try{
+
+        try {
             Connection con = Conexion.getConnection();
-            String q = "select mpublicacion.ID_pub, mpublicacion.des_pub, mpublicacion.id_usu, ehorario.nom_hor, ctipoinseguridad.nom_ins, clinea.nom_lin, cestacion.nom_est, musuario.nom_usu, cmes.nom_mes, canio.num_ano FROM mpublicacion INNER JOIN eparadas ON eparadas.id_par = mpublicacion.id_par INNER JOIN clinea ON clinea.id_lin = eparadas.id_lin INNER JOIN cestacion ON cestacion.id_est=eparadas.id_est INNER JOIN ehorario ON ehorario.id_hor=mpublicacion.id_hor INNER JOIN ctipoinseguridad ON ctipoinseguridad.id_ins=mpublicacion.id_ins INNER JOIN musuario ON musuario.id_usu=mpublicacion.id_usu INNER JOIN cmes ON cmes.id_mes=mpublicacion.id_mes INNER JOIN canio ON canio.id_ano=mpublicacion.id_anio where eparadas.id_lin = ? ORDER BY mpublicacion.id_pub DESC";
-            
-            PreparedStatement ps = con.prepareStatement(q);
-            
-            ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-            while(rs.next()){
+            String q = "select mpublicacion.ID_pub, mpublicacion.des_pub, mpublicacion.id_usu, ehorario.nom_hor, ctipoinseguridad.nom_ins, clinea.nom_lin, cestacion.nom_est, musuario.nom_usu, cmes.nom_mes, canio.num_ano FROM mpublicacion INNER JOIN eparadas ON eparadas.id_par = mpublicacion.id_par INNER JOIN clinea ON clinea.id_lin = eparadas.id_lin INNER JOIN cestacion ON cestacion.id_est=eparadas.id_est INNER JOIN ehorario ON ehorario.id_hor=mpublicacion.id_hor INNER JOIN ctipoinseguridad ON ctipoinseguridad.id_ins=mpublicacion.id_ins INNER JOIN musuario ON musuario.id_usu=mpublicacion.id_usu INNER JOIN cmes ON cmes.id_mes=mpublicacion.id_mes INNER JOIN canio ON canio.id_ano=mpublicacion.id_anio where eparadas.id_lin = "+id+" ORDER BY mpublicacion.id_pub DESC";
+
+            Statement set = con.createStatement();
+            ResultSet rs = set.executeQuery(q);
+            while (rs.next()) {
                 publicacion e = new publicacion();
                 e.setId(rs.getInt(1));
                 e.setContenido(rs.getString(2));
-                e.setId_usu(rs.getInt(3)); 
+                e.setId_usu(rs.getInt(3));
                 e.setNom_hor(rs.getString(4));
                 e.setNom_ins(rs.getString(5));
                 e.setNom_lin(rs.getString(6));
@@ -340,87 +335,88 @@ public static List<publicacion> buscarAllPublicacionesByLinea(int id){
             System.out.println(lista.get(1).getContenido());
             System.out.println("Publicacion encontrado");
             con.close();
-        
-        }catch(Exception ed){
+
+        } catch (Exception ed) {
             System.out.println("Error al buscar a los Publicacion");
             System.out.println(ed.getMessage());
-        
-        }
-        return lista;
-    }
-public static List<publicacion> buscarAllRepeticiones(int id){
-        List<publicacion> lista = new ArrayList<>();
-       
-        try{
-            Connection con = Conexion.getConnection();
-            String q = "select COUNT(mpublicacion.id_ins) as Repetidos, ctipoinseguridad.nom_ins, MPUBLICACION.ID_INS FROM mpublicacion INNER JOIN eparadas ON eparadas.id_par=mpublicacion.id_par INNER JOIN ctipoinseguridad ON ctipoinseguridad.id_ins=mpublicacion.id_ins where eparadas.id_lin=? group by mpublicacion.id_ins order by repetidos DESC";
-            
-            PreparedStatement ps = con.prepareStatement(q);
-            
-            ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-            while(rs.next()){
-                publicacion e = new publicacion();
-                e.setRepeticiones(rs.getInt(1));
-                e.setNom_ins(rs.getString(2));
-                
-                lista.add(e);
-                System.out.println(e.getContenido());
-            }
-            System.out.println(lista.get(1).getContenido());
-            System.out.println("Publicacion encontrado");
-            con.close();
-        
-        }catch(Exception ed){
-            System.out.println("Error al buscar a los Publicacion");
-            System.out.println(ed.getMessage());
-        
-        }
-        return lista;
-    }
-public static List<publicacion> buscarAllRepeticiones2(int id){
-        List<publicacion> lista = new ArrayList<>();
-       
-        try{
-            Connection con = Conexion.getConnection();
-            String q = "select COUNT(mpublicacion.id_hor) as Repetidos, ehorario.nom_hor, MPUBLICACION.ID_hor FROM mpublicacion INNER JOIN eparadas ON eparadas.id_par=mpublicacion.id_par INNER JOIN ehorario ON ehorario.id_hor=mpublicacion.id_hor where eparadas.id_lin=? group by mpublicacion.id_hor order by repetidos DESC";
-            
-            PreparedStatement ps = con.prepareStatement(q);
-            
-            ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-            while(rs.next()){
-                publicacion e = new publicacion();
-                e.setRepeticiones(rs.getInt(1));
-                e.setNom_ins(rs.getString(2));
-                
-                lista.add(e);
-                System.out.println(e.getContenido());
-            }
-            System.out.println(lista.get(1).getContenido());
-            System.out.println("Publicacion encontrado");
-            con.close();
-        
-        }catch(Exception ed){
-            System.out.println("Error al buscar a los Publicacion");
-            System.out.println(ed.getMessage());
-        
+
         }
         return lista;
     }
 
-public static List<publicacion> buscarAllRepeticiones3(){
+    public static List<publicacion> buscarAllRepeticiones(int id) {
         List<publicacion> lista = new ArrayList<>();
-       
-        try{
+
+        try {
+            Connection con = Conexion.getConnection();
+            String q = "select COUNT(mpublicacion.id_ins) as Repetidos, ctipoinseguridad.nom_ins, MPUBLICACION.ID_INS FROM mpublicacion INNER JOIN eparadas ON eparadas.id_par=mpublicacion.id_par INNER JOIN ctipoinseguridad ON ctipoinseguridad.id_ins=mpublicacion.id_ins where eparadas.id_lin=? group by mpublicacion.id_ins order by repetidos DESC";
+
+            PreparedStatement ps = con.prepareStatement(q);
+
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                publicacion e = new publicacion();
+                e.setRepeticiones(rs.getInt(1));
+                e.setNom_ins(rs.getString(2));
+
+                lista.add(e);
+                System.out.println(e.getContenido());
+            }
+            System.out.println(lista.get(1).getContenido());
+            System.out.println("Publicacion encontrado");
+            con.close();
+
+        } catch (Exception ed) {
+            System.out.println("Error al buscar a los Publicacion");
+            System.out.println(ed.getMessage());
+
+        }
+        return lista;
+    }
+
+    public static List<publicacion> buscarAllRepeticiones2(int id) {
+        List<publicacion> lista = new ArrayList<>();
+
+        try {
+            Connection con = Conexion.getConnection();
+            String q = "select COUNT(mpublicacion.id_hor) as Repetidos, ehorario.nom_hor, MPUBLICACION.ID_hor FROM mpublicacion INNER JOIN eparadas ON eparadas.id_par=mpublicacion.id_par INNER JOIN ehorario ON ehorario.id_hor=mpublicacion.id_hor where eparadas.id_lin=? group by mpublicacion.id_hor order by repetidos DESC";
+
+            PreparedStatement ps = con.prepareStatement(q);
+
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                publicacion e = new publicacion();
+                e.setRepeticiones(rs.getInt(1));
+                e.setNom_ins(rs.getString(2));
+
+                lista.add(e);
+                System.out.println(e.getContenido());
+            }
+            System.out.println(lista.get(1).getContenido());
+            System.out.println("Publicacion encontrado");
+            con.close();
+
+        } catch (Exception ed) {
+            System.out.println("Error al buscar a los Publicacion");
+            System.out.println(ed.getMessage());
+
+        }
+        return lista;
+    }
+
+    public static List<publicacion> buscarAllRepeticiones3() {
+        List<publicacion> lista = new ArrayList<>();
+
+        try {
             Connection con = Conexion.getConnection();
             String q = "select COUNT(mpublicacion.id_mes) as Repetidos, ehorario.nom_hor, ctipoinseguridad.nom_ins, cmes.nom_mes FROM mpublicacion INNER JOIN eparadas ON eparadas.id_par=mpublicacion.id_par INNER JOIN clinea ON clinea.id_lin = eparadas.id_lin INNER JOIN ehorario ON ehorario.id_hor=mpublicacion.id_hor INNER JOIN cmes ON cmes.id_mes=mpublicacion.id_mes INNER JOIN ctipoinseguridad ON ctipoinseguridad.id_ins=mpublicacion.id_ins group by mpublicacion.id_mes order by repetidos DESC";
-            
+
             PreparedStatement ps = con.prepareStatement(q);
-            
-            
+
             ResultSet rs = ps.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 publicacion e = new publicacion();
                 e.setRepeticiones(rs.getInt(1));
                 e.setNom_hor(rs.getString(2));
@@ -432,14 +428,15 @@ public static List<publicacion> buscarAllRepeticiones3(){
             System.out.println(lista.get(1).getContenido());
             System.out.println("Publicacion encontrado");
             con.close();
-        
-        }catch(Exception ed){
+
+        } catch (Exception ed) {
             System.out.println("Error al buscar a los Publicacion");
             System.out.println(ed.getMessage());
-        
+
         }
         return lista;
     }
+
     public int getId() {
         return id;
     }
@@ -448,5 +445,4 @@ public static List<publicacion> buscarAllRepeticiones3(){
         this.id = id;
     }
 
-    
 }

@@ -36,6 +36,7 @@ public class Publicar extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            try{
             Calendar fecha = Calendar.getInstance();
         int año = fecha.get(Calendar.YEAR);
         int mes = fecha.get(Calendar.MONTH) + 1;
@@ -50,7 +51,7 @@ public class Publicar extends HttpServlet {
             int id_usu = hola2.getId();
             
             String contenido = request.getParameter("textarea");
-            
+            System.out.println("aaaaAAAa");
             publicacion e = new publicacion();
             e.setContenido(contenido);
             e.setId_anio(id_anio);
@@ -61,23 +62,21 @@ public class Publicar extends HttpServlet {
             e.setId_hor(id_hor);
             System.out.println(id_mes);
             System.out.println(id_hor);
-            int estatus =publicacion.registrarPublicacion(e);
-            int linea = (int) sesionusu.getAttribute("linea");
-            if(estatus > 0){
-                response.sendRedirect("linea"+linea+".jsp");
-            }else{
-                response.sendRedirect("error.jsp");
-            }
+            publicacion.registrarPublicacion(e);
+            System.out.println("AAAaA");
+            String linea="ola";
+                System.out.println(linea);
+            System.out.println("todo bien");
+            //linea =(String)sesionusu.getAttribute("linea");
+            System.out.println(linea);
+            response.sendRedirect("index.html");
+            
+                
+                
+            
             /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet Publicar</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet Publicar at " + request.getContextPath()+ id_ins + contenido + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            
+            }catch(IOException ex){response.sendRedirect("error.jsp");}
         }
     }
 
